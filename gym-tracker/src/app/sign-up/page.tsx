@@ -4,24 +4,21 @@ import { useState } from "react";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "../firebase/config";
 
-export default function SignUp() {
+const SignUp = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-
 	const [createUserWithEmailAndPassword] =
 		useCreateUserWithEmailAndPassword(auth);
 
-	const handleSignUp = async (e: { preventDefault: () => void }) => {
-		e.preventDefault();
+	const handleSignUp = async () => {
 		try {
 			const res = await createUserWithEmailAndPassword(email, password);
-			console.log(res);
+			console.log({ res });
 			sessionStorage.setItem("user", "true");
 			setEmail("");
 			setPassword("");
-			console.log("elo");
-		} catch (error) {
-			console.error("Error signing up:", error);
+		} catch (e) {
+			console.error(e);
 		}
 	};
 
@@ -88,4 +85,6 @@ export default function SignUp() {
 			</div>
 		</div>
 	);
-}
+};
+
+export default SignUp;

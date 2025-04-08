@@ -4,6 +4,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase/config";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
+import Navbar from "@/components/navbar";
 
 export default function Home() {
 	const [user] = useAuthState(auth);
