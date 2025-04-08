@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../firebase/config";
+import { useRouter } from "next/navigation";
 
 const SignUp = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [createUserWithEmailAndPassword] =
 		useCreateUserWithEmailAndPassword(auth);
-
+	const router = useRouter();
 	const handleSignUp = async () => {
 		try {
 			const res = await createUserWithEmailAndPassword(email, password);
@@ -19,6 +21,18 @@ const SignUp = () => {
 			setPassword("");
 		} catch (e) {
 			console.error(e);
+		}
+	};
+
+	const handleSignUpWithGoogle = async () => {
+		const provider = new GoogleAuthProvider();
+		try {
+			const res = await signInWithPopup(auth, provider);
+			console.log({ res });
+			sessionStorage.setItem("user", "true");
+			router.push("/");
+		} catch (error) {
+			console.error("Error during Google sign-in:", error);
 		}
 	};
 
@@ -72,6 +86,17 @@ const SignUp = () => {
 						Sign Up
 					</button>
 				</form>
+				<div className="flex items-center justify-center">
+					<p className="text-sm text-gray-400">or</p>
+				</div>
+				<div>
+					<button
+						onClick={handleSignUpWithGoogle}
+						className="w-full px-4 py-2 font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+					>
+						Log in with Google
+					</button>
+				</div>
 
 				<p className="text-sm text-center text-gray-400">
 					Already have an account?{" "}
