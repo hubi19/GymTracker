@@ -94,7 +94,7 @@ const SignUp = () => {
 						onClick={handleSignUpWithGoogle}
 						className="w-full px-4 py-2 font-semibold text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
 					>
-						Log in with Google
+						Sign Up with Google
 					</button>
 				</div>
 
