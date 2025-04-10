@@ -8,6 +8,7 @@ import Map from "@/components/map";
 import dynamic from "next/dynamic";
 import ExerciseData from "@/components/exerciseData";
 import TrainersData from "@/components/trainersData";
+import VideoRecorder from "@/components/video";
 
 export default function Home() {
 	const [user] = useAuthState(auth);
@@ -29,6 +30,7 @@ export default function Home() {
 			<h1 className="text-2xl font-bold text-indigo-200">Welcome</h1>
 			<ExerciseData />
 			<TrainersData />
+			<VideoRecorder />
 			{/* <Map /> */}
 		</main>
 	);
