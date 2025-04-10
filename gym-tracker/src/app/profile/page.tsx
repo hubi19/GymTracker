@@ -13,8 +13,14 @@ export default function Profile() {
 		email?: string;
 	} | null>(null);
 	const router = useRouter();
-	const userSession = sessionStorage.getItem("user");
+	const [userSession, setUserSession] = useState<string | null>(null);
 
+	useEffect(() => {
+	if (typeof window !== "undefined") {
+		const session = sessionStorage.getItem("user");
+		setUserSession(session);
+	}
+}, []);
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
 			if (currentUser) {
