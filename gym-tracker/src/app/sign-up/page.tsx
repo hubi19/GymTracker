@@ -41,6 +41,11 @@ const SignUp = () => {
 			<h1 className="text-7xl text-sky-400 font-bold text-">
 				Gym Tracker
 			</h1>
+			<img
+				src="/sign_up_page.png"
+				alt="fitness banner"
+				className="max-w-xs"
+			/>
 			<div className="w-full max-w-md p-8 space-y-6 bg-gray-800 rounded-lg shadow-lg">
 				<h2 className="text-3xl font-bold text-center text-white">
 					Sign Up

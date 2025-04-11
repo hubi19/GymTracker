@@ -93,7 +93,7 @@ export default function TrainersData({
 											{trainer.name} {trainer.surname}
 										</span>
 										<span className="text-xs text-gray-500">
-											ID: {trainer.id}
+											{trainer.id}
 										</span>
 									</div>
 								</DropdownMenuItem>
