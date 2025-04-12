@@ -3,7 +3,7 @@
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "./firebase/config";
 import React, { useEffect, useState } from "react";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs, Timestamp } from "firebase/firestore";
 import StepIndicator from "@/components/StepIndicator";
 import DateSelector from "@/components/appointment/DateSelector";
 import GymSelector from "@/components/appointment/GymSelector";
@@ -125,7 +125,7 @@ export default function Home() {
           sets: ex.sets,
           type: ex.type,
         })),
-        createdAt: new Date().toISOString(),
+        createdAt: Timestamp.fromDate(new Date()),
       };
 
       const docRef = await addDoc(
@@ -133,7 +133,7 @@ export default function Home() {
         appointmentData
       );
 
-      const audio = new Audio('/audio/success.mp3');
+      const audio = new Audio("/audio/success.mp3");
       audio.play();
 
       alert(`Your appointment has been saved! ID: ${docRef.id}`);
@@ -235,7 +235,9 @@ export default function Home() {
           <p>Upload your progress:</p>
           <button
             className={`w-1/2 px-4 py-2 rounded-lg ${
-              currentSection === "camera" ? "bg-sky-500 text-white" : "bg-sky-800"
+              currentSection === "camera"
+                ? "bg-sky-500 text-white"
+                : "bg-sky-800"
             }`}
             onClick={() =>
               setCurrentSection((prev) => (prev === "camera" ? null : "camera"))
@@ -243,9 +245,7 @@ export default function Home() {
           >
             Camera Upload
           </button>
-          {currentSection === "camera" && (
-              <CameraUpload />
-          )}
+          {currentSection === "camera" && <CameraUpload />}
         </div>
       </div>
       <button
@@ -254,7 +254,6 @@ export default function Home() {
       >
         Log Out
       </button>
-
     </main>
   );
 }

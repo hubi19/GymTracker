@@ -19,7 +19,13 @@ export default function DateSelector({
       <Calendar
         mode="single"
         selected={selectedDate}
-        onSelect={setSelectedDate}
+        onSelect={(date) => {
+          if (date) {
+            setSelectedDate(date);
+          } else {
+            console.error("No date selected");
+          }
+        }}
         className="rounded-md border"
       />
       <Button

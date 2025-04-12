@@ -28,7 +28,7 @@ export default function AppointmentsList() {
           const docData = doc.data();
           return {
             id: doc.id,
-            date: docData.date,
+            date: docData.date ? new Date(docData.date) : null,
             gymName: docData.gymName || "",
             trainerName: docData.trainerName || "",
             exercises: Array.isArray(docData.exercises)
@@ -51,8 +51,11 @@ export default function AppointmentsList() {
           <div key={appointment.id} className="p-4 mb-4 bg-gray-700 rounded-lg">
             <p>
               <strong className="text-sky-500">Date:</strong>{" "}
-              {new Date(appointment.date.seconds * 1000).toLocaleDateString()}
+              {appointment.date
+                ? appointment.date.toLocaleDateString()
+                : "No date available"}
             </p>
+
             <p>
               <strong className="text-sky-500">Gym:</strong>{" "}
               {appointment.gymName}
