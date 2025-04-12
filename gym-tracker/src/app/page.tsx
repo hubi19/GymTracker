@@ -14,10 +14,11 @@ import ExerciseSelector from "@/components/appointment/ExerciseSelector";
 import AppointmentSummary from "@/components/appointment/AppointmentSummary";
 import AppointmentsList from "@/components/appointment/AppointmentsList";
 import Timer from "@/components/Timer";
+import SignIn from "./sign-in/page";
+import { signOut } from "firebase/auth";
 
 export default function Home() {
   const [user] = useAuthState(auth);
-  const router = useRouter();
   const [userSession, setUserSession] = useState<string | null>(null);
   const [currentSection, setCurrentSection] = useState("planner");
   const [currentStep, setCurrentStep] = useState(0);
@@ -45,14 +46,17 @@ export default function Home() {
   >([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const session = sessionStorage.getItem("user");
-    setUserSession(session);
-  }, []);
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Error logging out:", error);
+      alert("An error occurred while logging out. Please try again.");
+    }
+  };
 
   if (!user && !userSession) {
-    router.push("/sign-up");
-    return null; // Uniknięcie renderowania przed przekierowaniem
+    return <SignIn />;
   }
 
   const steps = [
@@ -103,39 +107,35 @@ export default function Home() {
   ];
 
   async function saveAppointment() {
-    if (!user) return; // Ensure the user is logged in
+    if (!user) return;
 
     setIsLoading(true);
 
     try {
-      // Prepare appointment data
       const appointmentData = {
         userId: user.uid,
-        date: selectedDate?.toISOString(), // Store date as ISO string
+        date: selectedDate?.toISOString(),
         gymId: selectedGym?.id,
         gymName: selectedGym?.name,
         trainerId: selectedTrainer?.id,
         trainerName: `${selectedTrainer?.name} ${selectedTrainer?.surname}`,
         exercises: selectedExercises.map((ex) => ({
-          exid: ex.id, // Unique identifier for each exercise
+          exid: ex.id,
           muscleGroup: ex.muscleGroup,
           reps: ex.reps,
           sets: ex.sets,
           type: ex.type,
         })),
-        createdAt: new Date().toISOString(), // Timestamp for when the appointment was created
+        createdAt: new Date().toISOString(),
       };
 
-      // Add appointment to Firestore
       const docRef = await addDoc(
         collection(db, "appointments"),
         appointmentData
       );
 
-      // Notify user of success
       alert(`Your appointment has been saved! ID: ${docRef.id}`);
 
-      // Reset form after successful save
       setSelectedDate(new Date());
       setSelectedGym(null);
       setSelectedTrainer(null);
@@ -152,7 +152,7 @@ export default function Home() {
   }
 
   return (
-    <main>
+    <main className="bg-gray-900 min-h-screen">
       <Navbar />
 
       <div className="flex flex-col gap-4 justify-center mt-4">
@@ -222,6 +222,12 @@ export default function Home() {
           </>
         )}
       </div>
+      <button
+        onClick={handleSignOut}
+        className="mt-auto mb-10 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+      >
+        Log Out
+      </button>
     </main>
   );
 }

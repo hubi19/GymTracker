@@ -5,6 +5,7 @@ import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../firebase/config";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -104,9 +105,9 @@ export default function SignIn() {
 
         <p className="text-sm text-center text-gray-400">
           Don't have an account?{" "}
-          <a href="/sign-up" className="text-blue-500 hover:underline">
-            Sign up here
-          </a>
+          <Link href="/sign-up" className="text-blue-500 hover:underline">
+            Sign up here!
+          </Link>
         </p>
       </div>
     </div>
