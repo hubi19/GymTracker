@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 
 export default function Timer() {
-  const [time, setTime] = useState<number>(300); // Default time: 5 minutes (300 seconds)
+  const [time, setTime] = useState<number>(300);
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
@@ -14,6 +14,9 @@ export default function Timer() {
       }, 1000);
     } else if (time === 0) {
       setIsRunning(false);
+      if (typeof window !== "undefined" && "vibrate" in navigator) {
+        navigator.vibrate([500, 200, 500]);
+      }
     }
     return () => {
       if (interval) clearInterval(interval);
@@ -97,6 +100,18 @@ export default function Timer() {
           </button>
         </div>
       )}
+
+      <div className="flex flex-col justify-start mt-4">
+        <p className="text-sm text-gray-400">Sample warm-up exercises:</p>
+        <ul className="list-disc list-inside text-start space-y-1">
+          <li className="text-gray-300">Jumping Jacks</li>
+          <li className="text-gray-300">High Knees</li>
+          <li className="text-gray-300">Arm Circles</li>
+          <li className="text-gray-300">Leg Swings</li>
+          <li className="text-gray-300">Push-ups</li>
+          <li className="text-gray-300">Plank</li>
+        </ul>
+      </div>
     </div>
   );
 }

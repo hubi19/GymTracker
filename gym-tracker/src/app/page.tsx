@@ -2,7 +2,6 @@
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "./firebase/config";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import StepIndicator from "@/components/StepIndicator";
@@ -15,6 +14,7 @@ import AppointmentsList from "@/components/appointment/AppointmentsList";
 import Timer from "@/components/Timer";
 import SignIn from "./sign-in/page";
 import { signOut } from "firebase/auth";
+import CameraUpload from "@/components/Camera";
 
 export default function Home() {
   const [user] = useAuthState(auth);
@@ -133,6 +133,9 @@ export default function Home() {
         appointmentData
       );
 
+      const audio = new Audio('/audio/success.mp3');
+      audio.play();
+
       alert(`Your appointment has been saved! ID: ${docRef.id}`);
 
       setSelectedDate(new Date());
@@ -151,7 +154,7 @@ export default function Home() {
   }
 
   return (
-    <main className="bg-gray-900 min-h-screen flex flex-col items-center justify-center text-white">
+    <main className="bg-gray-900 min-h-screen flex flex-col items-center justify-evenly text-white">
       <div className="text-4xl p-4">
         <h1>GymTracker</h1>
       </div>
@@ -162,7 +165,7 @@ export default function Home() {
             className={`w-1/2 px-4 py-2 rounded-lg ${
               currentSection === "planner"
                 ? "bg-sky-500 text-white"
-                : "bg-gray-500"
+                : "bg-sky-800"
             }`}
             onClick={() =>
               setCurrentSection((prev) =>
@@ -199,7 +202,7 @@ export default function Home() {
             className={`w-1/2 px-4 py-2 rounded-lg ${
               currentSection === "appointments"
                 ? "bg-sky-500 text-white"
-                : "bg-gray-500"
+                : "bg-sky-800"
             }`}
             onClick={() =>
               setCurrentSection((prev) =>
@@ -217,7 +220,7 @@ export default function Home() {
             className={`w-1/2 px-4 py-2 rounded-lg ${
               currentSection === "timer"
                 ? "bg-sky-500 text-white"
-                : "bg-gray-500"
+                : "bg-sky-800"
             }`}
             onClick={() =>
               setCurrentSection((prev) => (prev === "timer" ? null : "timer"))
@@ -227,6 +230,23 @@ export default function Home() {
           </button>
           {currentSection === "timer" && <Timer />}
         </div>
+
+        <div>
+          <p>Upload your progress:</p>
+          <button
+            className={`w-1/2 px-4 py-2 rounded-lg ${
+              currentSection === "camera" ? "bg-sky-500 text-white" : "bg-sky-800"
+            }`}
+            onClick={() =>
+              setCurrentSection((prev) => (prev === "camera" ? null : "camera"))
+            }
+          >
+            Camera Upload
+          </button>
+          {currentSection === "camera" && (
+              <CameraUpload />
+          )}
+        </div>
       </div>
       <button
         onClick={handleSignOut}
@@ -234,6 +254,7 @@ export default function Home() {
       >
         Log Out
       </button>
+
     </main>
   );
 }
