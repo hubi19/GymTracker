@@ -45,22 +45,24 @@ export default function AppointmentsList() {
   }, []);
 
   return (
-    <div className="w-full max-w-xl bg-gray-800 p-4 rounded-lg shadow-md">
+    <div className="w-1/2 text-start mt-4 bg-gray-800 p-4 rounded-lg shadow-md">
       {appointments.length > 0 ? (
         appointments.map((appointment) => (
           <div key={appointment.id} className="p-4 mb-4 bg-gray-700 rounded-lg">
             <p>
-              <strong>Date:</strong>{" "}
+              <strong className="text-sky-500">Date:</strong>{" "}
               {new Date(appointment.date.seconds * 1000).toLocaleDateString()}
             </p>
             <p>
-              <strong>Gym:</strong> {appointment.gymName}
+              <strong className="text-sky-500">Gym:</strong>{" "}
+              {appointment.gymName}
             </p>
             <p>
-              <strong>Trainer:</strong> {appointment.trainerName}
+              <strong className="text-sky-500">Trainer:</strong>{" "}
+              {appointment.trainerName}
             </p>
             <p>
-              <strong>Exercises:</strong>
+              <strong className="text-sky-500">Exercises:</strong>
             </p>
             <ul className="list-disc pl-5">
               {appointment.exercises.map((exercise) => (

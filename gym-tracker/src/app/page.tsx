@@ -5,7 +5,6 @@ import { auth, db } from "./firebase/config";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { addDoc, collection, getDocs } from "firebase/firestore";
-import Navbar from "@/components/navbar";
 import StepIndicator from "@/components/StepIndicator";
 import DateSelector from "@/components/appointment/DateSelector";
 import GymSelector from "@/components/appointment/GymSelector";
@@ -20,7 +19,7 @@ import { signOut } from "firebase/auth";
 export default function Home() {
   const [user] = useAuthState(auth);
   const [userSession, setUserSession] = useState<string | null>(null);
-  const [currentSection, setCurrentSection] = useState("planner");
+  const [currentSection, setCurrentSection] = useState<String | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
@@ -152,79 +151,86 @@ export default function Home() {
   }
 
   return (
-    <main className="bg-gray-900 min-h-screen">
-      <Navbar />
-
-      <div className="flex flex-col gap-4 justify-center mt-4">
-        <button
-          className={`px-4 py-2 rounded-lg ${
-            currentSection === "planner"
-              ? "bg-sky-500 text-white"
-              : "bg-gray-300"
-          }`}
-          onClick={() => setCurrentSection("planner")}
-        >
-          Workout Planner
-        </button>
-        <button
-          className={`px-4 py-2 rounded-lg ${
-            currentSection === "appointments"
-              ? "bg-sky-500 text-white"
-              : "bg-gray-300"
-          }`}
-          onClick={() => setCurrentSection("appointments")}
-        >
-          Summary of Appointments
-        </button>
-        <button
-          className={`px-4 py-2 rounded-lg ${
-            currentSection === "timer" ? "bg-sky-500 text-white" : "bg-gray-300"
-          }`}
-          onClick={() => setCurrentSection("timer")}
-        >
-          Timer
-        </button>
+    <main className="bg-gray-900 min-h-screen flex flex-col items-center justify-center text-white">
+      <div className="text-4xl p-4">
+        <h1>GymTracker</h1>
       </div>
+      <div className="flex flex-col w-full gap-4 text-center justify-center mt-4">
+        <div className="items-center flex flex-col justify-center">
+          <p>Keep working out and plan your next appointment:</p>
+          <button
+            className={`w-1/2 px-4 py-2 rounded-lg ${
+              currentSection === "planner"
+                ? "bg-sky-500 text-white"
+                : "bg-gray-500"
+            }`}
+            onClick={() =>
+              setCurrentSection((prev) =>
+                prev === "planner" ? null : "planner"
+              )
+            }
+          >
+            Workout Planner
+          </button>
+          {currentSection === "planner" && (
+            <>
+              <h1 className="text-2xl my-4 font-bold text-white">
+                Plan your workout
+              </h1>
+              <StepIndicator steps={steps} currentStep={currentStep} />
+              <div className="w-full max-w-2xl">
+                {steps[currentStep].component}
+              </div>
+              {currentStep === steps.length - 1 && (
+                <AppointmentSummary
+                  selectedDate={selectedDate}
+                  selectedGym={selectedGym}
+                  selectedTrainer={selectedTrainer}
+                  selectedExercises={selectedExercises}
+                />
+              )}
+            </>
+          )}
+        </div>
 
-      {/* Section Content */}
-      <div className="flex flex-col gap-6 items-center p-6">
-        {currentSection === "planner" && (
-          <>
-            <h1 className="text-2xl font-bold text-white">Plan your workout</h1>
-            <StepIndicator steps={steps} currentStep={currentStep} />
-            <div className="w-full max-w-2xl">
-              {steps[currentStep].component}
-            </div>
-            {currentStep === steps.length - 1 && (
-              <AppointmentSummary
-                selectedDate={selectedDate}
-                selectedGym={selectedGym}
-                selectedTrainer={selectedTrainer}
-                selectedExercises={selectedExercises}
-              />
-            )}
-          </>
-        )}
-
-        {currentSection === "appointments" && (
-          <>
-            <h1 className="text-2xl font-bold text-white">
-              Summary of Appointments
-            </h1>
-            <AppointmentsList />
-          </>
-        )}
-
-        {currentSection === "timer" && (
-          <>
-            <h1 className="text-2xl font-bold text-white">Timer</h1>
-            <Timer />
-          </>
-        )}
+        <div className="flex flex-col items-center">
+          <p>See your planned appointments:</p>
+          <button
+            className={`w-1/2 px-4 py-2 rounded-lg ${
+              currentSection === "appointments"
+                ? "bg-sky-500 text-white"
+                : "bg-gray-500"
+            }`}
+            onClick={() =>
+              setCurrentSection((prev) =>
+                prev === "appointments" ? null : "appointments"
+              )
+            }
+          >
+            Summary of Appointments
+          </button>
+          {currentSection === "appointments" && <AppointmentsList />}
+        </div>
+        <div className="flex flex-col items-center w-full">
+          <p>Need some warm-up? </p>
+          <button
+            className={`w-1/2 px-4 py-2 rounded-lg ${
+              currentSection === "timer"
+                ? "bg-sky-500 text-white"
+                : "bg-gray-500"
+            }`}
+            onClick={() =>
+              setCurrentSection((prev) => (prev === "timer" ? null : "timer"))
+            }
+          >
+            Timer
+          </button>
+          {currentSection === "timer" && <Timer />}
+        </div>
       </div>
       <button
         onClick={handleSignOut}
-        className="mt-auto mb-10 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+        className="mt-auto mb-10 px-4 py-2 bg-red-400 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
       >
         Log Out
       </button>

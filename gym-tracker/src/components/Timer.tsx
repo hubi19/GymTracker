@@ -13,7 +13,7 @@ export default function Timer() {
         setTime((prevTime) => prevTime - 1);
       }, 1000);
     } else if (time === 0) {
-      setIsRunning(false); // Stop timer when it reaches zero
+      setIsRunning(false);
     }
     return () => {
       if (interval) clearInterval(interval);
@@ -32,15 +32,15 @@ export default function Timer() {
 
   const handleReset = () => {
     setIsRunning(false);
-    setTime(300); // Reset to default time: 5 minutes
+    setTime(300);
   };
 
   const handleAddTime = () => {
-    setTime((prevTime) => prevTime + 30); // Add 30 seconds
+    setTime((prevTime) => prevTime + 30);
   };
 
   const handleSubtractTime = () => {
-    setTime((prevTime) => (prevTime > 30 ? prevTime - 30 : prevTime)); // Subtract 30 seconds, but not below zero
+    setTime((prevTime) => (prevTime > 30 ? prevTime - 30 : prevTime));
   };
 
   const formatTime = (seconds: number) => {
@@ -50,58 +50,53 @@ export default function Timer() {
   };
 
   return (
-    <div className="w-full max-w-md bg-gray-800 p-4 rounded-lg shadow-md">
-      <h2 className="text-xl font-bold text-white text-center">Timer</h2>
-
-      {/* Timer Display */}
-      <div className="text-center my-4">
+    <div className="w-full max-w-md bg-gray-800 p-4 rounded-lg mt-4 shadow-md">
+      <div className="text-center">
         <span className="text-3xl font-bold text-white">
           {formatTime(time)}
         </span>
       </div>
 
-      {/* Adjust Timer */}
-      {!isRunning && (
-        <div className="flex justify-center gap-4 mb-4">
-          <button
-            onClick={handleAddTime}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-          >
-            +30s
-          </button>
-          <button
-            onClick={handleSubtractTime}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-          >
-            -30s
-          </button>
-        </div>
-      )}
-
-      {/* Timer Controls */}
-      <div className="flex justify-center gap-4">
+      <div className="flex justify-center gap-4 mt-4">
         {!isRunning ? (
           <button
             onClick={handleStart}
-            className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+            className="w-1/2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
           >
             Start Timer
           </button>
         ) : (
           <button
             onClick={handleStop}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+            className="w-1/2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
           >
             Stop
           </button>
         )}
         <button
           onClick={handleReset}
-          className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
+          className="w-1/2 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
         >
           Reset
         </button>
       </div>
+
+      {!isRunning && (
+        <div className="flex justify-center gap-4 mt-4">
+          <button
+            onClick={handleAddTime}
+            className="w-1/2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          >
+            +30s
+          </button>
+          <button
+            onClick={handleSubtractTime}
+            className="w-1/2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          >
+            -30s
+          </button>
+        </div>
+      )}
     </div>
   );
 }
