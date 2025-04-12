@@ -1,39 +1,12 @@
-import { db } from "../firebase/config";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
-import { useEffect, useState } from "react";
+// app/booking/page.tsx
+import { CreateBooking } from "@/lib/bookings";
 
-interface BookingData {
-	date: string;
-	exercises: { id: string }[];
-	trainerId: string;
+export default function BookingPage() {
+	// Używaj CreateBooking np. wewnątrz handlerów
+	return (
+		<div>
+			<h1>Twoje rezerwacje</h1>
+			{/* UI do zarządzania */}
+		</div>
+	);
 }
-
-export const CreateBooking = async (
-	userId: string,
-	bookingData: BookingData
-) => {
-	try {
-		const docRef = await addDoc(collection(db, "bookings"), {
-			userId,
-			date: bookingData.date,
-			exercisesIds: bookingData.exercises.map(
-				(exercise: { id: any }) => exercise.id
-			),
-			trainerId: bookingData.trainerId,
-		});
-		return docRef.id;
-	} catch (error) {
-		console.error("Error adding booking: ", error);
-		return null;
-	}
-};
-
-export const getUserBookings = async (userId: string) => {
-	const q = query(collection(db, "bookings"), where("userId", "==", userId));
-	const querySnapshot = await getDocs(q);
-	const bookings: { id: string }[] = [];
-	querySnapshot.forEach((doc) => {
-		bookings.push({ id: doc.id, ...doc.data() });
-	});
-	return bookings;
-};
